@@ -1,49 +1,84 @@
-import java.io.BufferedWriter;
-import java.io.FileWriter;
+import java.util.Scanner;
+import java.util.StringTokenizer;
+import java.io.File;
 import java.io.IOException;
-import java.util.Random;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
 
 public class FileInputGenerator {
-    // Configuration constants
-    private static final int LOCATION_COUNT = 100;
-    private static final int APPLIANCES_PER_LOCATION_LOW = 15;
-    private static final int APPLIANCES_PER_LOCATION_HIGH = 20;
-    private static final String OUTPUT_FILE = "appliances.csv";
+	public static int LOCATION_COUNT=100, 
+				APPLIANCES_PER_LOCATION_LOW=15, APPLIANCES_PER_LOCATION_HIGH=20;
+	public static class Appliance {
+		public String name;
+		public int onW, offW; 
+		public double probOn; 
+		public boolean smart; 
+		public double probSmart;
 
-    // Sample appliance types
-    private static final String[] APPLIANCE_TYPES = {
-        "Fridge", "Washer", "Dryer", "Oven", "Microwave",
-        "TV", "Heater", "AC", "Fan", "Light", "Computer"
-    };
+		public Appliance (String n, int on, int off, double pOn, boolean s, double pSmart)
+		{ name=n; onW=on; offW=off; probOn=pOn; smart=s; probSmart=pSmart; }
 
-    public static void main(String[] args) {
-        Random rand = new Random();
+		public String toString () {
+			return name + "," + onW + "," + offW + "," + probOn + "," + smart + "," + probSmart;
+		}
+	}
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(OUTPUT_FILE))) {
-            for (int i = 0; i < LOCATION_COUNT; i++) {
-                long location = 10000000L + rand.nextInt(90000000);
-
-                // Random number of appliances per location
-                int applianceCount = rand.nextInt(
-                    APPLIANCES_PER_LOCATION_HIGH - APPLIANCES_PER_LOCATION_LOW + 1
-                ) + APPLIANCES_PER_LOCATION_LOW;
-
-                for (int j = 0; j < applianceCount; j++) {
-                    String name = APPLIANCE_TYPES[rand.nextInt(APPLIANCE_TYPES.length)];
-                    int onWattage = rand.nextInt(2000) + 1; // 1 to 2000 watts
-                    int offWattage = rand.nextInt(200) + 1; // 1 to 200 watts
-                    double probabilityOn = rand.nextDouble(); // 0.0 to 1.0
-
-                    // Write line to file
-                    writer.write(location + "," + name + "," + onWattage + "," + offWattage + "," + probabilityOn);
-                    writer.newLine();
-                }
-            }
-
-            System.out.println("File generated successfully: " + OUTPUT_FILE);
-
-        } catch (IOException e) {
-            System.err.println("Error writing to file: " + e.getMessage());
-        }
-    }
+	public static void main( String [] args ) throws IOException {
+		Appliance [] app = new Appliance[100];  // default 100 possible appliance types
+		File inputFile = new File( "ApplianceDetail.txt" );
+		Scanner scan = new Scanner( inputFile );
+		int count=0;
+		while ( scan.hasNext( ) ) {
+			StringTokenizer stringToken = new StringTokenizer(scan.nextLine());
+			app[count] = new Appliance(stringToken.nextToken(","),
+						Integer.parseInt(stringToken.nextToken(",")),
+						Integer.parseInt(stringToken.nextToken(",")),
+						Double.parseDouble(stringToken.nextToken(",")),
+						Boolean.parseBoolean(stringToken.nextToken(",")),
+						Double.parseDouble(stringToken.nextToken()));
+			count++;
+		}
+/*
+output a comma delimited file
+the location (represented by an 8 digit numeric account number)
+type (string)
+"on" wattage used (integer)
+"off" wattage used (integer)
+probability (floating point, i.e..01=1%) that the appliance is "on" at any time
+smart (boolean) 
+Smart appliances (if "on") power reduction percent (floating point, i.e..33=33%).
+*/
+		try
+		{
+			FileWriter fw = new FileWriter( "output.txt", false);
+			BufferedWriter bw = new BufferedWriter( fw );
+			for (long location=1;location<=LOCATION_COUNT ;location++ ) {
+				int applianceCount=(int)(Math.random()
+					* (APPLIANCES_PER_LOCATION_HIGH - APPLIANCES_PER_LOCATION_LOW+1))
+					+ APPLIANCES_PER_LOCATION_LOW;
+				for (int i=1;i<=applianceCount;i++ ){
+					int index=(int)(Math.random()*count);  // pick an appliance randomly
+					bw.write(String.valueOf(10000000+location));
+					bw.write( "," );		
+					bw.write(app[index].name);
+					bw.write( "," );		
+					bw.write(String.valueOf(app[index].onW));
+					bw.write( "," );		
+					bw.write(String.valueOf(app[index].offW));
+					bw.write( "," );		
+					bw.write(String.valueOf(app[index].probOn));
+					bw.write( "," );		
+					bw.write(String.valueOf(app[index].smart));
+					bw.write( "," );
+					bw.write(String.valueOf(app[index].probSmart));
+					bw.newLine( );
+					bw.flush();
+				}
+			}
+		}
+		catch( IOException ioe )
+		{
+			ioe.printStackTrace( );
+		}
+	}
 }
