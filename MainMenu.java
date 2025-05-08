@@ -12,8 +12,10 @@ public class MainMenu {
             System.out.println("2. Load Appliances from File");
             System.out.println("3. Print All Appliances");
             System.out.println("4. Print Summary Report");
-            System.out.println("5. Run Simulation");
-            System.out.println("6. Exit");
+            System.out.println("5. Print Appliances by Location");
+            System.out.println("6. Print Appliances by Type");
+            System.out.println("7. Run Simulation");
+            System.out.println("8. Exit");
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
             scanner.nextLine(); // Clear the newline
@@ -55,6 +57,20 @@ public class MainMenu {
                     break;
 
                 case 5:
+                    // Print appliances by location
+                    System.out.print("Enter location (8 digits): ");
+                    long loc = scanner.nextLong();
+                    manager.printAppliancesByLocation(loc);
+                    break;
+
+                case 6:
+                    // Print appliances by type
+                    System.out.print("Enter appliance type (e.g., Refrigerator, TV): ");
+                    String type = scanner.nextLine();
+                    manager.printAppliancesByType(type);
+                    break;
+
+                case 7:
                     // Run simulation
                     System.out.print("Enter simulation time length (minutes): ");
                     int simTime = scanner.nextInt();
@@ -66,13 +82,13 @@ public class MainMenu {
                     simulator.run(simTime, interval, warningLevel);
                     break;
 
-                case 6:
+                case 8:
                     running = false;
                     System.out.println("Exiting... Goodbye!");
                     break;
 
                 default:
-                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println("Invalid choice. Please try again.\n");
             }
         }
 
