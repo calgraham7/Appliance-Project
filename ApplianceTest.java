@@ -32,6 +32,8 @@ public class ApplianceTest {
         // Test 8: ID uniqueness
         System.out.println("Test 8: Appliance IDs -> " + a1.getApplianceID() + ", " + a2.getApplianceID() + ", " + a3.getApplianceID());
 
+
+        
         //SmartAppliance Testing
         // Test 1: Valid smart appliance creation
         SmartAppliance sa1 = new SmartAppliance(12345678L, "Smart Fridge", 100, 10, 0.75, 0.25);
@@ -66,8 +68,9 @@ public class ApplianceTest {
         Appliance ba1 = new Appliance(12345678L, "Smart Fridge", 100, 10, 0.75);
         System.out.println("Test 8b (SmartAppliance equals Appliance): " + sa1.equals(ba1) + " (Expected: false)");
 
+        
 
-                // Test program for Appliance Manager
+        // Test program for Appliance Manager
         ApplianceManager manager = new ApplianceManager();
 
         // Test 1: Add appliances
