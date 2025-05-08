@@ -1,7 +1,9 @@
+import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.FileNotFoundException;
 
 public class ApplianceManager {
@@ -26,6 +28,11 @@ public class ApplianceManager {
             }
         }
         return false;
+    }
+    
+    // Get all appliances as a flat list
+    public List<Appliance> getAllAppliances() {
+        return new ArrayList<>(this.appliances);
     }
 
     // Find an appliance by ID
@@ -96,23 +103,20 @@ public class ApplianceManager {
 
     // Print a summary report
     public void printSummaryReport() {
-        System.out.println("\nSummary Report:");
-        System.out.println("Total Appliances: " + appliances.size());
-        ArrayList<String> countedTypes = new ArrayList<>();
-        for (Appliance a : appliances) {
-            String name = a.getName();
-            if (!countedTypes.contains(name)) {
-                int count = 0;
-                for (Appliance b : appliances) {
-                    if (b.getName().equals(name)) {
-                        count++;
-                    }
-                }
-                System.out.println(name + ": " + count);
-                countedTypes.add(name);
-            }
+        String report = "\nAppliance Summary Report:\n";
+        report += "Total appliances: " + this.appliances.size() + "\n";
+
+        System.out.println(report);
+
+        // Write to output file
+        try (FileWriter writer = new FileWriter("appliance_summary.txt")) {
+            writer.write(report);
+            System.out.println("Summary report saved to appliance_summary.txt");
+        } catch (IOException e) {
+            System.out.println("Error writing summary report: " + e.getMessage());
         }
     }
+
 
     // Print all appliances
     public void printAllAppliances() {
