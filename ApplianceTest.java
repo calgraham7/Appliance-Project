@@ -65,5 +65,55 @@ public class ApplianceTest {
         // Test 8: Appliance equality override check with Appliance
         Appliance ba1 = new Appliance(12345678L, "Smart Fridge", 100, 10, 0.75);
         System.out.println("Test 8b (SmartAppliance equals Appliance): " + sa1.equals(ba1) + " (Expected: false)");
+
+
+                // Test program for Appliance Manager
+        ApplianceManager manager = new ApplianceManager();
+
+        // Test 1: Add appliances
+        Appliance ma1 = new Appliance(12345678L, "Fridge", 100, 10, 0.75);
+        Appliance ma2 = new Appliance(12345678L, "Oven", 150, 20, 0.5);
+        Appliance ma3 = new Appliance(87654321L, "Fridge", 100, 10, 0.75);
+        manager.addAppliance(ma1);
+        manager.addAppliance(ma2);
+        manager.addAppliance(ma3);
+        System.out.println("Test 1c: Added 3 appliances.");
+        manager.printAllAppliances();
+
+        // Test 2: Find by ID
+        Appliance found = manager.findApplianceByID(ma1.getApplianceID());
+        System.out.println("Test 2c (Find by ID): " + (found != null && found.equals(a1)));
+
+        // Test 3: Remove by ID
+        boolean removed = manager.removeAppliance(ma2.getApplianceID());
+        System.out.println("Test 3c (Remove by ID): " + removed + " (Expected: true)");
+
+        // Test 4: Remove non-existent ID
+        boolean removedInvalid = manager.removeAppliance(999999);
+        System.out.println("Test 4c (Remove invalid ID): " + removedInvalid + " (Expected: false)");
+
+        // Test 5: Get appliances by location
+        System.out.println("Test 5c (Get by location 12345678):");
+        for (Appliance ma : manager.getAppliancesByLocation(12345678L)) {
+            System.out.println(ma);
+        }
+
+        // Test 6: Get appliances by type
+        System.out.println("Test 6c (Get by type 'Fridge'):");
+        for (Appliance ma : manager.getAppliancesByType("Fridge")) {
+            System.out.println(ma);
+        }
+
+        // Test 7: Print summary report
+        System.out.println("Test 7c (Summary Report):");
+        manager.printSummaryReport();
+
+        // Test 8: Print all appliances
+        System.out.println("Test 8c (All Appliances):");
+        manager.printAllAppliances();
+
+        // Test 9: Load from invalid file
+        System.out.println("Test 9c (Load from bad file):");
+        manager.loadAppliancesFromFile("nonexistent.csv"); // Expect FileNotFound error message
     }
 }
