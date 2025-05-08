@@ -1,11 +1,13 @@
 public class SmartAppliance extends Appliance {
     private double reducePercentage;
     private static final double DEFAULT_REDUCE_PERCENTAGE = 1.0;
+    private int smartCount = 0;
 
     public SmartAppliance(long newLocation, String newName, int newOnWatt, int newOffWatt, double newProbability,
             double newReducePercentage) {
         super(newLocation, newName, newOnWatt, newOffWatt, newProbability);
         setReducePercentage(newReducePercentage);
+	smartCount++;
     }
 
     public double getReducePercentage() {
