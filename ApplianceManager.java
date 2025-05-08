@@ -69,4 +69,32 @@ public class ApplianceManager {
             System.out.println(appliance);
         }
     }
+
+    // Print appliances by location
+    public void printAppliancesByLocation(long location) {
+        boolean found = false;
+        for (Appliance appliance : this.appliances) {
+            if (appliance.getLocation() == location) {
+                System.out.println(appliance);
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("No appliances found for location: " + location);
+        }
+    }
+
+    // Print appliances by type
+    public void printAppliancesByType(String type) {
+        boolean found = false;
+        for (Appliance appliance : this.appliances) {
+            if (appliance.getName().equalsIgnoreCase(type)) {
+                System.out.println(appliance);
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("No appliances found of type: " + type);
+        }
+    }
 }
