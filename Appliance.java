@@ -7,6 +7,7 @@ public class Appliance implements Comparable<Appliance> {
 	private static int nextID = 1;
 	private int applianceID = 0;
 
+
 	// class constants
 	private static final String DEFAULT_NAME = "UNKNOWN";
 	private static final int DEFAULT_ON_WATTAGE = 1;
@@ -46,6 +47,7 @@ public class Appliance implements Comparable<Appliance> {
 	public double getProbOn() {
 		return probabilityOn;
 	}
+
 
 	public void setLocation(long newLocation) {
 		if (newLocation > 99999999 || newLocation < 10000000) {
