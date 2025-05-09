@@ -23,21 +23,42 @@ public class MainMenu {
 
             switch (choice) {
                 case 1:
-                    // Manual appliance entry
-                    System.out.print("Enter location (8 digits): ");
-                    long location = scanner.nextLong();
-                    scanner.nextLine(); // Clear newline
-                    System.out.print("Enter name: ");
-                    String name = scanner.nextLine();
-                    System.out.print("Enter on wattage: ");
-                    int onWattage = scanner.nextInt();
-                    System.out.print("Enter off wattage: ");
-                    int offWattage = scanner.nextInt();
-                    System.out.print("Enter probability (0.0 to 1.0): ");
-                    double probOn = scanner.nextDouble();
-                    Appliance appliance = new Appliance(location, name, onWattage, offWattage, probOn);
-                    manager.addAppliance(appliance);
-                    System.out.println("Appliance added successfully.");
+                    try {
+                        System.out.print("Enter location (8 digits): ");
+                        long location = scanner.nextLong();
+                        scanner.nextLine(); // Clear newline
+
+                        System.out.print("Enter appliance name: ");
+                        String name = scanner.nextLine();
+
+                        System.out.print("Enter on wattage: ");
+                        int onWattage = scanner.nextInt();
+
+                        System.out.print("Enter off wattage: ");
+                        int offWattage = scanner.nextInt();
+
+                        System.out.print("Enter probability (0.0 to 1.0): ");
+                        double probOn = scanner.nextDouble();
+
+                        System.out.print("Is this a smart appliance? (true/false): ");
+                        boolean isSmart = scanner.nextBoolean();
+
+                        Appliance appliance;
+                        if (isSmart) {
+                            System.out.print("Enter reduce percentage (0.0 to 1.0): ");
+                            double reducePercent = scanner.nextDouble();
+                            appliance = new SmartAppliance(location, name, onWattage, offWattage, probOn,
+                                    reducePercent);
+                        } else {
+                            appliance = new NormalAppliance(location, name, onWattage, offWattage, probOn, 0.0);
+                        }
+
+                        manager.addAppliance(appliance);
+                        System.out.println("Appliance added successfully.");
+                    } catch (Exception e) {
+                        System.out.println("Error: " + e.getMessage());
+                        scanner.nextLine(); // Clear buffer in case of input mismatch
+                    }
                     break;
 
                 case 2:
