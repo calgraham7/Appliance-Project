@@ -1,9 +1,8 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ApplianceManager {
     private ArrayList<Appliance> appliances;
@@ -17,15 +16,16 @@ public class ApplianceManager {
         this.appliances.add(appliance);
     }
 
-    public boolean removeApplianceByName(String name) {
-    for (int i = 0; i < appliances.size(); i++) {
-        if (appliances.get(i).getName().equalsIgnoreCase(name)) {
-            appliances.remove(i);
-            return true;
+    public int removeAppliancesByName(String name) {
+        int removedCount = 0;
+        for (int i = appliances.size() - 1; i >= 0; i--) {
+            if (appliances.get(i).getName().equalsIgnoreCase(name)) {
+                appliances.remove(i);
+                removedCount++;
+            }
         }
+        return removedCount;
     }
-    return false;
-}
 
     // Add appliances from a file
     public void addAppliancesFromFile(String filename) {
@@ -58,18 +58,84 @@ public class ApplianceManager {
     }
 
     // Print a summary report
+    /*
+     * public void printSummaryReport() {
+     * String report = "\nAppliance Summary Report:\n";
+     * report += "Total appliances: " + this.appliances.size() + "\n";
+     * 
+     * System.out.println(report);
+     * 
+     * // Write to output file
+     * try (FileWriter writer = new FileWriter("appliance_summary.txt")) {
+     * writer.write(report);
+     * System.out.println("Summary report saved to appliance_summary.txt");
+     * } catch (IOException e) {
+     * System.out.println("Error writing summary report: " + e.getMessage());
+     * }
+     * }
+     */
+
     public void printSummaryReport() {
-        String report = "\nAppliance Summary Report:\n";
-        report += "Total appliances: " + this.appliances.size() + "\n";
+        System.out.println("\nSummary Report:");
 
-        System.out.println(report);
+        // Count unique locations
+        ArrayList<Long> uniqueLocations = new ArrayList<Long>();
+        for (int i = 0; i < appliances.size(); i++) {
+            Appliance a = appliances.get(i);
+            if (!uniqueLocations.contains(a.getLocation())) {
+                uniqueLocations.add(a.getLocation());
+            }
+        }
+        System.out.println("Total Locations: " + uniqueLocations.size());
 
-        // Write to output file
-        try (FileWriter writer = new FileWriter("appliance_summary.txt")) {
-            writer.write(report);
-            System.out.println("Summary report saved to appliance_summary.txt");
-        } catch (IOException e) {
-            System.out.println("Error writing summary report: " + e.getMessage());
+        // Count appliance names by type
+        ArrayList<String> smartNames = new ArrayList<String>();
+        ArrayList<Integer> smartCounts = new ArrayList<Integer>();
+
+        ArrayList<String> normalNames = new ArrayList<String>();
+        ArrayList<Integer> normalCounts = new ArrayList<Integer>();
+
+        for (int i = 0; i < appliances.size(); i++) {
+            Appliance a = appliances.get(i);
+            String name = a.getName();
+
+            if (a instanceof SmartAppliance) {
+                if (smartNames.contains(name)) {
+                    int index = smartNames.indexOf(name);
+                    smartCounts.set(index, smartCounts.get(index) + 1);
+                } else {
+                    smartNames.add(name);
+                    smartCounts.add(1);
+                }
+            } else if (a instanceof NormalAppliance) {
+                if (normalNames.contains(name)) {
+                    int index = normalNames.indexOf(name);
+                    normalCounts.set(index, normalCounts.get(index) + 1);
+                } else {
+                    normalNames.add(name);
+                    normalCounts.add(1);
+                }
+            }
+        }
+
+        // Print smart appliance counts
+        System.out.println("\nSmart Appliance Counts:");
+        if (smartNames.isEmpty()) {
+            System.out.println("None");
+        } else {
+            for (int i = 0; i < smartNames.size(); i++) {
+                System.out.println(smartNames.get(i) + ": " + smartCounts.get(i));
+            }
+        }
+
+        // Print normal appliance counts
+        System.out.println("\nNormal Appliance Counts:");
+        if (normalNames.size() == 0) {
+            System.out.println("None");
+        } else {
+            for (int i = 0; i < normalNames.size(); i++) {
+                System.out.println(normalNames.get(i) + ": " + normalCounts.get(i));
+            }
         }
     }
 
@@ -96,15 +162,24 @@ public class ApplianceManager {
 
     // Print appliances by type
     public void printAppliancesByType(String type) {
-        boolean found = false;
-        for (Appliance appliance : this.appliances) {
-            if (appliance.getName().equalsIgnoreCase(type)) {
-                System.out.println(appliance);
-                found = true;
+        System.out.println("\nAppliances of type: " + type);
+        int count = 0;
+
+        for (Appliance a : appliances) {
+            if (type.equalsIgnoreCase("Smart") && a instanceof SmartAppliance) {
+                System.out.println(a);
+                count++;
+            } else if (type.equalsIgnoreCase("Normal") && a instanceof NormalAppliance) {
+                System.out.println(a);
+                count++;
             }
         }
-        if (!found) {
-            System.out.println("No appliances found of type: " + type);
+
+        if (count == 0) {
+            System.out.println("No appliances of type '" + type + "' found.");
+        } else {
+            System.out.println("Total " + type + " appliances: " + count);
         }
     }
+
 }
