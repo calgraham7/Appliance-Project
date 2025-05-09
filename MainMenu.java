@@ -9,13 +9,14 @@ public class MainMenu {
         while (running) {
             System.out.println("\n--- Appliance Manager Main Menu ---");
             System.out.println("1. Add Appliance Manually");
-            System.out.println("2. Load Appliances from File");
-            System.out.println("3. Print All Appliances");
-            System.out.println("4. Print Summary Report");
-            System.out.println("5. Print Appliances by Location");
-            System.out.println("6. Print Appliances by Type");
-            System.out.println("7. Run Simulation");
-            System.out.println("8. Exit");
+            System.out.println("2. Delete Appliances By Name");
+            System.out.println("3. Load Appliances from File");
+            System.out.println("4. Print All Appliances");
+            System.out.println("5. Print Summary Report");
+            System.out.println("6. Print Appliances by Location");
+            System.out.println("7. Print Appliances by Type");
+            System.out.println("8. Run Simulation");
+            System.out.println("9. Exit");
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
             scanner.nextLine(); // Clear the newline
@@ -40,37 +41,44 @@ public class MainMenu {
                     break;
 
                 case 2:
+                    System.out.print("Enter the appliance name to delete: ");
+                    String deleteName = scanner.nextLine();
+                    int deleted = manager.removeAppliancesByName(deleteName);
+                    System.out.println("Deleted " + deleted + " appliance(s) named '" + deleteName + "'.");
+                    break;
+
+                case 3:
                     // Load from file
                     System.out.print("Enter the filename to load appliances from: ");
                     String filename = scanner.nextLine();
                     manager.addAppliancesFromFile(filename);
                     break;
 
-                case 3:
+                case 4:
                     // Print all appliances
                     manager.printAllAppliances();
                     break;
 
-                case 4:
+                case 5:
                     // Print summary report
                     manager.printSummaryReport();
                     break;
 
-                case 5:
+                case 6:
                     // Print appliances by location
                     System.out.print("Enter location (8 digits): ");
                     long loc = scanner.nextLong();
                     manager.printAppliancesByLocation(loc);
                     break;
 
-                case 6:
+                case 7:
                     // Print appliances by type
                     System.out.print("Enter appliance type (e.g., Refrigerator, TV): ");
                     String type = scanner.nextLine();
                     manager.printAppliancesByType(type);
                     break;
 
-                case 7:
+                case 8:
                     // Run simulation
                     System.out.print("Enter simulation time length (minutes): ");
                     int simTime = scanner.nextInt();
@@ -82,7 +90,7 @@ public class MainMenu {
                     simulator.run(simTime, interval, warningLevel);
                     break;
 
-                case 8:
+                case 9:
                     running = false;
                     System.out.println("Exiting... Goodbye!");
                     break;
