@@ -1,5 +1,3 @@
-package applianceproj;
-
 public class SmartAppliance extends Appliance {
     private double reducePercentage;
     private static final double DEFAULT_REDUCE_PERCENTAGE = 1.0;
