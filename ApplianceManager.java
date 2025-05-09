@@ -28,20 +28,27 @@ public class ApplianceManager {
     }
 
     // Add appliances from a file
-    public void addAppliancesFromFile(String filename) {
+    public void addAppliancesFromFile(String filename) throws ApplianceException {
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length == 5) {
+
+                if (parts.length == 7) {
                     long location = Long.parseLong(parts[0].trim());
                     String name = parts[1].trim();
                     int onWattage = Integer.parseInt(parts[2].trim());
                     int offWattage = Integer.parseInt(parts[3].trim());
                     double probOn = Double.parseDouble(parts[4].trim());
-
-                    Appliance appliance = new Appliance(location, name, onWattage, offWattage, probOn);
-                    this.addAppliance(appliance);
+                    boolean isSmart = Boolean.parseBoolean(parts[5].trim());
+                    double reducePercent = Double.parseDouble(parts[6].trim());
+                    if (isSmart == true) {
+                    	SmartAppliance appliance = new SmartAppliance(location, name, onWattage, offWattage, probOn, isSmart, reducePercent);
+                    	this.addAppliance(appliance);
+                    } else {
+                    	NormalAppliance appliance = new NormalAppliance(location, name, onWattage, offWattage, probOn, false, 0.0);
+                        this.addAppliance(appliance);
+                    }
                 }
             }
             System.out.println("Appliances loaded from file: " + filename);
