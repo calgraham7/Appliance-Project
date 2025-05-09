@@ -94,7 +94,7 @@ public class MainMenu {
 
                 case 7:
                     // Print appliances by type
-                    System.out.print("Enter appliance type (e.g., Refrigerator, TV): ");
+                    System.out.print("Enter appliance type (Smart or Normal): ");
                     String type = scanner.nextLine();
                     manager.printAppliancesByType(type);
                     break;
