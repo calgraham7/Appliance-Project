@@ -17,6 +17,16 @@ public class ApplianceManager {
         this.appliances.add(appliance);
     }
 
+    public boolean removeApplianceByName(String name) {
+    for (int i = 0; i < appliances.size(); i++) {
+        if (appliances.get(i).getName().equalsIgnoreCase(name)) {
+            appliances.remove(i);
+            return true;
+        }
+    }
+    return false;
+}
+
     // Add appliances from a file
     public void addAppliancesFromFile(String filename) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
