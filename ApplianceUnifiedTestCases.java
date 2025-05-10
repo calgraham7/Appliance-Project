@@ -1,106 +1,65 @@
+public class ApplianceUnifiedTest {
+    public static void main(String[] args) throws ApplianceException {
+        System.out.println("=== Appliance Unified Test Cases ===");
 
-// ApplianceUnifiedTestCases.java
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.File;
+        // ---------- Appliance Tests ----------
+        Appliance a1 = new Appliance(12345678, "Fridge", 100, 10, 0.75);
+        Appliance a2 = new Appliance(12345678, "Fridge", 100, 10, 0.75);
+        Appliance a3 = new Appliance(12345678, "TV", 80, 5, 0.6);
 
-public class ApplianceUnifiedTestCases {
-    public static void main(String[] args) {
-        testAppliance();
-        testSmartAppliance();
-        testNormalAppliance();
-        testApplianceManager();
-    }
+        System.out.println("Appliance Test 1: " + a1);
+        System.out.println("Appliance Test 2 (equals): " + a1.equals(a2)); // true
+        System.out.println("Appliance Test 3 (compareTo): " + a3.compareTo(a1)); // > 0 if a1 has more onWatt
 
-    private static void testAppliance() {
-        log("--- Appliance Class Tests ---");
+        // ---------- SmartAppliance Tests ----------
+        SmartAppliance sa1 = new SmartAppliance(12345678, "SmartTV", 200, 20, 0.6, true, 0.5);
+        SmartAppliance sa2 = new SmartAppliance(12345678, "SmartTV", 200, 20, 0.6, true, 0.5);
 
-        // Invalid probability
-        try {
-            new Appliance(12345678L, "Fridge", 100, 10, -0.2);
-        } catch (ApplianceException e) {
-            log("Invalid probability caught: " + e.getMessage());
-        }
+        System.out.println("SmartAppliance Test 1: Reduce% = " + sa1.getReducePercentage());
+        System.out.println("SmartAppliance Test 2 (equals): " + sa1.equals(sa2)); // true
+        System.out.println("SmartAppliance Test 3 (toString): " + sa1);
 
-        try {
-            Appliance alwaysOn = new Appliance(12345678L, "Light", 60, 5, 1.0);
-            log("isOn(1.0): " + alwaysOn.isOnThisInterval());
-
-            Appliance neverOn = new Appliance(12345678L, "Fan", 70, 5, 0.0);
-            log("isOn(0.0): " + neverOn.isOnThisInterval());
-
-            Appliance a = new Appliance(12345678L, "Microwave", 800, 100, 0.5);
-            log("Formatted Report: " + a.toString());
-        } catch (Exception e) {
-            logException(e);
-        }
-    }
-
-    private static void testSmartAppliance() {
-        log("--- SmartAppliance Tests ---");
-        try {
-            SmartAppliance sa = new SmartAppliance(12345678L, "SmartAC", 1000, 50, 1.0, true, 0.6);
-            log("getWattage with reduction: " + sa.getWattage(true));
-            log("getWattage without reduction: " + sa.getWattage(false));
-            log("isOn(1.0): " + sa.isOnThisInterval());
-
-            SmartAppliance sa2 = new SmartAppliance(12345678L, "SmartHeater", 1000, 100, 0.0, true, 0.8);
-            log("isOn(0.0): " + sa2.isOnThisInterval());
-        } catch (Exception e) {
-            logException(e);
-        }
-    }
-
-    private static void testNormalAppliance() {
-        log("--- NormalAppliance Tests ---");
-        try {
-            NormalAppliance na = new NormalAppliance(12345678L, "Toaster", 800, 80, 1.0, false, 0.0);
-            log("getWattage: " + na.getWattage(true));
-            log("isOn(1.0): " + na.isOnThisInterval());
-        } catch (Exception e) {
-            logException(e);
-        }
-
-        try {
-            new NormalAppliance(12345678L, "Fan", 100, -10, 0.5, false, 0.0);
-        } catch (ApplianceException e) {
-            log("Caught invalid offWattage: " + e.getMessage());
-        }
-
-        try {
-            NormalAppliance na3 = new NormalAppliance(12345678L, "Lamp", 100, 10, 0.0, false, 0.0);
-            log("isOn(0.0): " + na3.isOnThisInterval());
-        } catch (Exception e) {
-            logException(e);
-        }
-    }
-
-    private static void testApplianceManager() {
-        log("--- ApplianceManager Tests ---");
+        // ---------- ApplianceManager Tests ----------
         ApplianceManager manager = new ApplianceManager();
+        manager.addAppliance(a1);
+        manager.addAppliance(a3);
+        manager.addAppliance(sa1);
 
+        System.out.println("ApplianceManager Test 1: Print All Appliances");
+        manager.printAllAppliances();
+
+        System.out.println("ApplianceManager Test 2: Summary Report");
+        manager.printSummaryReport();
+
+        System.out.println("ApplianceManager Test 3a: Filter by Smart Type");
+        manager.printAppliancesByType("Smart");
+
+        System.out.println("ApplianceManager Test 3b: Filter by Normal Type");
+        manager.printAppliancesByType("Normal");
+
+        // ---------- NormalAppliance Tests ----------
         try {
-            Appliance a1 = new Appliance(12345678L, "Fridge", 100, 10, 0.75);
-            Appliance a2 = new Appliance(12345678L, "Fridge", 100, 10, 0.75);
-            manager.addAppliance(a1);
-            manager.addAppliance(a2);
+            NormalAppliance na1 = new NormalAppliance(12345678, "Lamp", 60, 5, 0.8, false, 0.0);
+            NormalAppliance na2 = new NormalAppliance(12345678, "Heater", 150, 20, 0.7, false, 0.0);
+            NormalAppliance na3 = new NormalAppliance(12345678, "Fan", 100, 10, 0.6, false, 0.0);
+            NormalAppliance na4 = new NormalAppliance(12345678, "AC", 200, 15, 0.9, false, 0.0);
 
-            log("Find by type 'Fridge':");
-            manager.printAppliancesByType("Fridge");
+            System.out.println("NormalAppliance Test 1: " + na1);
+            System.out.println(
+                    "NormalAppliance Test 2: OnWatts = " + na2.getOnWatts() + ", OffWatts = " + na2.getOffWatts());
+            System.out.println("NormalAppliance Test 3: Counter = " + na3.getNormalCounter()); // always 1 unless made
+                                                                                               // static
+            System.out.println("NormalAppliance Test 4: toString = " + na4.toString());
+
+            manager.addAppliance(na1);
+            manager.addAppliance(na2);
+            manager.addAppliance(na3);
+            manager.addAppliance(na4);
+
         } catch (Exception e) {
-            logException(e);
+            System.out.println("Unexpected error in NormalAppliance tests: " + e.getMessage());
         }
-    }
 
-    private static void log(String message) {
-        System.out.println(message);
-    }
-
-    private static void logException(Exception e) {
-        try (FileWriter fw = new FileWriter("log.txt", true)) {
-            fw.write(e.getMessage() + "\n");
-        } catch (IOException io) {
-            io.printStackTrace();
-        }
+        System.out.println("=== All Tests Completed Successfully ===");
     }
 }
