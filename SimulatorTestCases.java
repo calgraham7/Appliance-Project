@@ -10,7 +10,7 @@ public class SimulatorTestCases {
             manager.addAppliance(new Appliance(12345678L, "Fridge", 100, 10, 0.75));
             Simulator sim = new Simulator(manager);
             sim.run(10, 2, 100);
-        } catch (Exception e) {
+        } catch (ApplianceException e) {
             logException(e);
         }
     }
