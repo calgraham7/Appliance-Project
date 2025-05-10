@@ -18,7 +18,14 @@ public class MainMenu {
             System.out.println("8. Run Simulation");
             System.out.println("9. Exit");
             System.out.print("Enter your choice: ");
-            int choice = scanner.nextInt();
+            int choice;
+            if (scanner.hasNextInt()) {
+                choice = scanner.nextInt();
+            } else {
+                System.out.println("Invalid input. Please enter a number from the menu options.");
+                scanner.next(); // Clear the invalid input
+                continue;
+            }
             scanner.nextLine(); // Clear the newline
 
             switch (choice) {
