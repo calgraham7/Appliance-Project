@@ -62,7 +62,7 @@ public class MainMenu {
 
                         manager.addAppliance(appliance);
                         System.out.println("Appliance added successfully.");
-                    } catch (Exception e) {
+                    } catch (ApplianceException e) {
                         System.out.println("Error: " + e.getMessage());
                         scanner.nextLine(); // Clear buffer in case of input mismatch
                     }
