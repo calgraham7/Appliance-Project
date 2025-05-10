@@ -12,8 +12,10 @@ public class ApplianceManager {
     }
 
     // Add an appliance to the manager
-    public void addAppliance(Appliance appliance) {
-        this.appliances.add(appliance);
+    public void addAppliance(Appliance appliance) throws ApplianceException {
+        if (appliance == null)
+            throw new ApplianceException("Cannot add null appliance.");
+        appliances.add(appliance);
     }
 
     public int removeAppliancesByName(String name) {
@@ -43,10 +45,12 @@ public class ApplianceManager {
                     boolean isSmart = Boolean.parseBoolean(parts[5].trim());
                     double reducePercent = Double.parseDouble(parts[6].trim());
                     if (isSmart == true) {
-                    	SmartAppliance appliance = new SmartAppliance(location, name, onWattage, offWattage, probOn, isSmart, reducePercent);
-                    	this.addAppliance(appliance);
+                        SmartAppliance appliance = new SmartAppliance(location, name, onWattage, offWattage, probOn,
+                                isSmart, reducePercent);
+                        this.addAppliance(appliance);
                     } else {
-                    	NormalAppliance appliance = new NormalAppliance(location, name, onWattage, offWattage, probOn, false, 0.0);
+                        NormalAppliance appliance = new NormalAppliance(location, name, onWattage, offWattage, probOn,
+                                false, 0.0);
                         this.addAppliance(appliance);
                     }
                 }
@@ -63,24 +67,6 @@ public class ApplianceManager {
     public List<Appliance> getAllAppliances() {
         return new ArrayList<>(this.appliances);
     }
-
-    // Print a summary report
-    /*
-     * public void printSummaryReport() {
-     * String report = "\nAppliance Summary Report:\n";
-     * report += "Total appliances: " + this.appliances.size() + "\n";
-     * 
-     * System.out.println(report);
-     * 
-     * // Write to output file
-     * try (FileWriter writer = new FileWriter("appliance_summary.txt")) {
-     * writer.write(report);
-     * System.out.println("Summary report saved to appliance_summary.txt");
-     * } catch (IOException e) {
-     * System.out.println("Error writing summary report: " + e.getMessage());
-     * }
-     * }
-     */
 
     public void printSummaryReport() {
         System.out.println("\nSummary Report:");
