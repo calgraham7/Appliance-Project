@@ -14,23 +14,23 @@ public class Appliance implements Comparable<Appliance> {
 	private static final double DEFAULT_PROBABILITY = 0.0;
 	private static final long DEFAULT_LOCATION = 99999999;
 
-	public Appliance(long newLocation, String newName, int newOnWatt, int newOffWatt, double newProbability)throws ApplianceException {
-		  
-			if (location < 10000000L || location > 99999999L)
-				throw new ApplianceException("Invalid location: must be 8 digits.");
-		
-			if (name == null || name.trim().isEmpty())
-				throw new ApplianceException("Name cannot be null or empty.");
-		
-			if (onWattage < 0)
-				throw new ApplianceException("On wattage must be non-negative.");
-		
-			if (offWattage < 0)
-				throw new ApplianceException("Off wattage must be non-negative.");
-		
-			if (probabilityOn < 0.0 || probabilityOn > 1.0)
-				throw new ApplianceException("Probability must be between 0.0 and 1.0.");
+	public Appliance(long newLocation, String newName, int newOnWatt, int newOffWatt, double newProbability)
+			throws ApplianceException {
 
+		if (newLocation < 10000000L || newLocation > 99999999L)
+			throw new ApplianceException("Invalid location: must be 8 digits.");
+
+		if (newName == null || newName.trim().isEmpty())
+			throw new ApplianceException("Name cannot be null or empty.");
+
+		if (newOnWatt < 0)
+			throw new ApplianceException("On wattage must be non-negative.");
+
+		if (newOffWatt <= 0)
+			throw new ApplianceException("Off wattage must be non-negative.");
+
+		if (newProbability < 0.0 || probabilityOn > 1.0)
+			throw new ApplianceException("Probability must be between 0.0 and 1.0.");
 
 		setLocation(newLocation);
 		setName(newName);
@@ -65,10 +65,10 @@ public class Appliance implements Comparable<Appliance> {
 	}
 
 	public void setLocation(long newLocation) {
-		if (newLocation > 99999999 || newLocation < 10000000) {
-			location = DEFAULT_LOCATION;
-		} else {
+		if (newLocation >= 10000000l && newLocation <= 99999999l) {
 			location = newLocation;
+		} else {
+			location = DEFAULT_LOCATION;
 		}
 	}
 
